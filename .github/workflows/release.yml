@@ -11,7 +11,7 @@ on:
         required: true
         type: string
       authorized:
-        description: Explicitly authorize generating assets; public publication requires separate authorization
+        description: Confirm authorization to generate assets; publishing is a separate operation
         required: true
         type: boolean
         default: false

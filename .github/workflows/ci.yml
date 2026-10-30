@@ -41,9 +41,3 @@ jobs:
       - run: pnpm build
       - run: pnpm release:package --local-preview --out "${RUNNER_TEMP}/compiled-preview"
       - run: pnpm release:smoke "${RUNNER_TEMP}/compiled-preview" "${RUNNER_TEMP}/smoke-evidence"
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: compiled-synth-preview
-          path: ${{ runner.temp }}/compiled-preview/*
-          if-no-files-found: error
-          retention-days: 7

@@ -42,10 +42,12 @@ in a fresh directory, starts compiled code, checks HTTP health/assets, ingests a
 real watched filesystem edit, and rejects a foreign database unchanged. An
 incomplete smoke run is not installation/runtime acceptance.
 
-CI and the manually dispatched release workflow upload compiled assets only.
-They do not publish an npm package or a GitHub release. Public publication needs
-separate explicit authorization and verification of tag/SHA/assets. Run the full
-CI gates before using the release workflow; do not bypass failed tests or audit.
+CI builds and tests a temporary compiled preview without uploading it. The
+manually dispatched release workflow uploads compiled assets only after its
+non-preview license gate passes. Neither workflow publishes an npm package or a
+GitHub release. Public publication needs authorization and verification of
+tag/SHA/assets. Run the full CI gates before using the release
+workflow; do not bypass failed tests or audit.
 
 `THIRD-PARTY-NOTICES.md` is included verbatim as a draft (176 production dependency
 versions, 175 local license texts and one upstream-linked license text).
