@@ -17,12 +17,12 @@ export type Sensitivity = keyof typeof SENSITIVITY_TTL_LIMIT_SECONDS;
 
 export const CONTRACT_DEPENDENCIES = {
   "@sinclair/typebox": {
-    version: "0.34.41",
+    version: "0.34.52",
     license: "MIT",
     reason: "Single runtime-schema and Static TypeScript type source.",
   },
   ajv: {
-    version: "8.17.1",
+    version: "8.20.0",
     license: "MIT",
     reason:
       "Strict JSON Schema validation with deterministic error collection.",
@@ -33,12 +33,12 @@ export const CONTRACT_DEPENDENCIES = {
     reason: "Standards-based date-time format validation for Ajv.",
   },
   vitest: {
-    version: "3.2.4",
+    version: "4.1.10",
     license: "MIT",
     reason: "Node 22-compatible owned contract tests.",
   },
   typescript: {
-    version: "5.8.3",
+    version: "6.0.2",
     license: "Apache-2.0",
     reason: "Strict TypeScript compilation baseline used by this delivery.",
   },
