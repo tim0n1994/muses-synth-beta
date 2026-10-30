@@ -12,6 +12,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { git, hash, inventory, root, verifyBuild } from "../build-identity.mjs";
+import { createArchive } from "./archive.mjs";
 import { withoutAuditExemptions } from "./dependency-policy.mjs";
 import { assertNoticeReady } from "./notice-policy.mjs";
 const { values } = parseArgs({
@@ -159,7 +160,7 @@ execFileSync(
   { stdio: "inherit" },
 );
 const archive = `${name}.tar.gz`;
-execFileSync("tar", ["-czf", join(out, archive), "-C", stage, name]);
+createArchive(join(out, archive), stage, name);
 writeFileSync(
   join(out, "SHA256SUMS"),
   `${hash(readFileSync(join(out, archive)))}  ${archive}\n`,

@@ -6,10 +6,12 @@ player/replay experience. / 公开 beta 使用合成音景，面向受信任的�
 
 ## Start / 启动
 
-Install Node `>=22.13 <23` and pnpm `11.4.0`. Installation normally needs
-npm registry and native-prebuild host access unless the required files are
-cached. If no supported `better-sqlite3` prebuild is available, Python 3 and
-a native compiler toolchain are needed.
+Install Node `>=22.13 <23` and pnpm `11.4.0`. The locked `better-sqlite3`
+builds from source during installation: Python 3, `make`, a C/C++ compiler and
+Node headers are required. On macOS, install Xcode Command Line Tools; on Linux,
+install the distribution's native build tools. `node-gyp` downloads Node headers
+unless they are already available locally. The npm registry and header download
+normally need network access unless the required files are cached.
 The intended platforms are macOS and Linux; see the release evidence for
 combinations actually verified. From a new checkout:
 

@@ -16,9 +16,12 @@ node runtime.mjs start
 node runtime.mjs watch --dir /path/to/your/project --server http://127.0.0.1:3001
 ```
 
-Install uses the frozen lockfile and approved native dependency builds; it needs
-registry access unless all packages are cached (`install --offline`). No source
-compiler or dev dependencies are required. Browser sound requires a user gesture.
+Install uses the frozen lockfile and builds the locked SQLite dependency from
+source. Python 3, `make`, a C/C++ compiler and Node headers are required; install
+Xcode Command Line Tools on macOS or native build tools on Linux. The registry
+and Node header download need network access unless already cached or locally
+provided (`install --offline`). No TypeScript compiler or JavaScript development
+dependencies are required. Browser sound requires a user gesture.
 The watcher sends activity metadata without relative file paths by default;
 the watched directory's basename is still included in the event subject.
 Relative file paths require explicit opt-in.

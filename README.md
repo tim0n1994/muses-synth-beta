@@ -21,6 +21,8 @@ is an experiment, not a medical treatment or a guarantee of focus.
 ## Try it locally
 
 Requirements: Node `>=22.13 <23`, pnpm `11.4.0`, and a browser with Web Audio.
+The locked SQLite dependency builds locally and also needs Python 3, `make`, a
+C/C++ compiler and Node headers. See the [usage guide](docs/USAGE.md) for details.
 From a checkout of this repository:
 
 ```bash

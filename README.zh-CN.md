@@ -16,7 +16,7 @@ Muses 是一个**本地优先的开发者音景工具**：它把可观察的编�
 
 ## 在本机试用
 
-需要 Node `>=22.13 <23`、pnpm `11.4.0` 和支持 Web Audio 的浏览器。在项目目录中运行：
+需要 Node `>=22.13 <23`、pnpm `11.4.0` 和支持 Web Audio 的浏览器。锁定的 SQLite 依赖需要本机编译，还需 Python 3、`make`、C/C++ 编译器和 Node 头文件；详见[使用指南](docs/USAGE.md)。在项目目录中运行：
 
 ```bash
 pnpm install --frozen-lockfile
