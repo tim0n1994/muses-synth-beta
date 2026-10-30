@@ -1,0 +1,4 @@
+{
+  "schemaVersion": "0.1",
+  "components": [{ "id": "unknown", "type": "custom.widget", "props": {} }]
+}

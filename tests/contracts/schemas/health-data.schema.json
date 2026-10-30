@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "muses://contracts/health-data",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "version", "database"],
+  "properties": {
+    "status": { "const": "ok" },
+    "version": {
+      "type": "string",
+      "pattern": "^0\\.1\\.\\d+(?:[-+][0-9A-Za-z.-]+)?$"
+    },
+    "database": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "journalMode"],
+      "properties": {
+        "status": { "enum": ["ready", "degraded"] },
+        "journalMode": { "const": "wal" }
+      }
+    }
+  }
+}

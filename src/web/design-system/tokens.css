@@ -1,0 +1,114 @@
+:root,
+.muses-root {
+  --muses-font-sans:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --muses-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+  --muses-text-xs: 0.75rem;
+  --muses-text-sm: 0.875rem;
+  --muses-text-md: 1rem;
+  --muses-text-lg: 1.125rem;
+  --muses-text-xl: 1.5rem;
+  --muses-text-2xl: 2rem;
+  --muses-line-tight: 1.2;
+  --muses-line-normal: 1.5;
+  --muses-weight-regular: 400;
+  --muses-weight-medium: 500;
+  --muses-weight-semibold: 600;
+  --muses-weight-bold: 700;
+
+  --muses-space-1: 0.25rem;
+  --muses-space-2: 0.5rem;
+  --muses-space-3: 0.75rem;
+  --muses-space-4: 1rem;
+  --muses-space-5: 1.25rem;
+  --muses-space-6: 1.5rem;
+  --muses-space-8: 2rem;
+  --muses-space-10: 2.5rem;
+  --muses-space-12: 3rem;
+
+  --muses-radius-sm: 0.5rem;
+  --muses-radius-md: 0.75rem;
+  --muses-radius-lg: 1rem;
+  --muses-radius-pill: 999px;
+
+  --muses-shadow-sm: 0 1px 2px rgb(15 23 42 / 0.08);
+  --muses-shadow-md: 0 8px 24px rgb(15 23 42 / 0.1);
+
+  --muses-duration-fast: 120ms;
+  --muses-duration-normal: 180ms;
+  --muses-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  --muses-color-bg: #f7f8fb;
+  --muses-color-surface: #ffffff;
+  --muses-color-surface-raised: #ffffff;
+  --muses-color-text: #172033;
+  --muses-color-text-muted: #5f6b7e;
+  --muses-color-border: #d7dde8;
+  --muses-color-border-strong: #aeb8c9;
+  --muses-color-accent: #315efb;
+  --muses-color-accent-contrast: #ffffff;
+  --muses-color-positive: #168a5b;
+  --muses-color-warning: #a46508;
+  --muses-color-danger: #bb2d3b;
+  --muses-color-unknown: #667085;
+  --muses-color-focus: #0b6bcb;
+  --muses-color-track: #e7ebf2;
+  --muses-color-overlay: rgb(15 23 42 / 0.56);
+
+  --muses-container-max: 90rem;
+  --muses-grid-gap: var(--muses-space-4);
+  --muses-card-padding: var(--muses-space-5);
+}
+
+.muses-root[data-theme="dark"] {
+  color-scheme: dark;
+  --muses-color-bg: #0e1420;
+  --muses-color-surface: #151d2a;
+  --muses-color-surface-raised: #1a2433;
+  --muses-color-text: #f3f6fb;
+  --muses-color-text-muted: #aab4c5;
+  --muses-color-border: #344055;
+  --muses-color-border-strong: #526078;
+  --muses-color-accent: #82a2ff;
+  --muses-color-accent-contrast: #0b1020;
+  --muses-color-positive: #56c995;
+  --muses-color-warning: #f2b95e;
+  --muses-color-danger: #ff7d8a;
+  --muses-color-unknown: #aab4c5;
+  --muses-color-focus: #9ac7ff;
+  --muses-color-track: #263247;
+  --muses-color-overlay: rgb(0 0 0 / 0.72);
+  --muses-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.32);
+  --muses-shadow-md: 0 10px 28px rgb(0 0 0 / 0.38);
+}
+
+@media (prefers-color-scheme: dark) {
+  .muses-root[data-theme="system"] {
+    color-scheme: dark;
+    --muses-color-bg: #0e1420;
+    --muses-color-surface: #151d2a;
+    --muses-color-surface-raised: #1a2433;
+    --muses-color-text: #f3f6fb;
+    --muses-color-text-muted: #aab4c5;
+    --muses-color-border: #344055;
+    --muses-color-border-strong: #526078;
+    --muses-color-accent: #82a2ff;
+    --muses-color-accent-contrast: #0b1020;
+    --muses-color-positive: #56c995;
+    --muses-color-warning: #f2b95e;
+    --muses-color-danger: #ff7d8a;
+    --muses-color-unknown: #aab4c5;
+    --muses-color-focus: #9ac7ff;
+    --muses-color-track: #263247;
+    --muses-color-overlay: rgb(0 0 0 / 0.72);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .muses-root {
+    --muses-color-border: currentColor;
+    --muses-color-border-strong: currentColor;
+  }
+}

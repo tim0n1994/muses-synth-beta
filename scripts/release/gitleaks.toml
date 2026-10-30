@@ -1,0 +1,21 @@
+[extend]
+useDefault = true
+
+# Only these three exact path + full-line pairs are synthetic exceptions.
+[[rules]]
+id = "generic-api-key"
+[[rules.allowlists]]
+condition = "AND"
+regexTarget = "line"
+paths = ['''(^|/)src/shared/fixtures/valid\.ts$''']
+regexes = ['''^\s*idempotencyKey: "idem\.effect\.pending\.0001",\s*$''']
+[[rules.allowlists]]
+condition = "AND"
+regexTarget = "line"
+paths = ['''(^|/)src/shared/fixtures/invalid\.ts$''']
+regexes = ['''^\s*idempotencyKey: "idem\.effect\.applied\.invalid\.0001",\s*$''']
+[[rules.allowlists]]
+condition = "AND"
+regexTarget = "line"
+paths = ['''(^|/)src/shared/fixtures/invalid\.ts$''']
+regexes = ['''^\s*idempotencyKey: "idem\.effect\.reverted\.invalid\.0001",\s*$''']

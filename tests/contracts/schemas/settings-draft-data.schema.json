@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "muses://contracts/settings-draft-data",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["draftId", "key", "status", "config", "createdAt"],
+  "properties": {
+    "draftId": { "type": "string", "pattern": "^drf_[A-Za-z0-9_-]{4,120}$" },
+    "key": { "const": "interaction-shell" },
+    "status": { "enum": ["draft", "validated"] },
+    "config": { "$ref": "muses://contracts/shell-config" },
+    "createdAt": { "type": "string" }
+  }
+}

@@ -1,0 +1,508 @@
+/*
+ * Auth surfaces: a light island in the settings-workspace visual family.
+ *
+ * Scoped on purpose. The design-system stylesheet is not loaded by the app
+ * shell (the dashboard and registry bring their own CSS), so importing it
+ * globally here would restyle registry badges/cards elsewhere. Instead the
+ * token palette and the handful of design-system component classes we reuse
+ * (muses-card / muses-button / muses-badge) are defined under `.auth-scope`,
+ * which every auth container carries. Values mirror
+ * src/web/design-system/{tokens,primitives}.css. No inline styles — CSP-safe.
+ */
+
+.auth-scope {
+  --muses-font-sans:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --muses-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+  --muses-text-xs: 0.75rem;
+  --muses-text-sm: 0.875rem;
+  --muses-text-md: 1rem;
+  --muses-text-lg: 1.125rem;
+  --muses-text-xl: 1.5rem;
+  --muses-text-2xl: 2rem;
+  --muses-line-tight: 1.2;
+  --muses-line-normal: 1.5;
+  --muses-weight-regular: 400;
+  --muses-weight-medium: 500;
+  --muses-weight-semibold: 600;
+  --muses-weight-bold: 700;
+
+  --muses-space-1: 0.25rem;
+  --muses-space-2: 0.5rem;
+  --muses-space-3: 0.75rem;
+  --muses-space-4: 1rem;
+  --muses-space-5: 1.25rem;
+  --muses-space-6: 1.5rem;
+  --muses-space-8: 2rem;
+
+  --muses-radius-sm: 0.5rem;
+  --muses-radius-md: 0.75rem;
+  --muses-radius-lg: 1rem;
+  --muses-radius-pill: 999px;
+
+  --muses-shadow-sm: 0 1px 2px rgb(15 23 42 / 0.08);
+  --muses-shadow-md: 0 8px 24px rgb(15 23 42 / 0.1);
+
+  --muses-duration-fast: 120ms;
+  --muses-duration-normal: 180ms;
+  --muses-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  --muses-color-bg: #f7f8fb;
+  --muses-color-surface: #ffffff;
+  --muses-color-surface-raised: #ffffff;
+  --muses-color-text: #172033;
+  --muses-color-text-muted: #5f6b7e;
+  --muses-color-border: #d7dde8;
+  --muses-color-border-strong: #aeb8c9;
+  --muses-color-accent: #315efb;
+  --muses-color-accent-contrast: #ffffff;
+  --muses-color-positive: #168a5b;
+  --muses-color-warning: #a46508;
+  --muses-color-danger: #bb2d3b;
+  --muses-color-unknown: #667085;
+  --muses-color-focus: #0b6bcb;
+  --muses-color-track: #e7ebf2;
+
+  --muses-card-padding: var(--muses-space-5);
+
+  font-family: var(--muses-font-sans);
+  font-size: var(--muses-text-md);
+  line-height: var(--muses-line-normal);
+}
+
+.auth-scope *,
+.auth-scope *::before,
+.auth-scope *::after {
+  box-sizing: border-box;
+}
+
+.auth-scope button,
+.auth-scope input,
+.auth-scope select,
+.auth-scope textarea {
+  font: inherit;
+}
+
+.auth-scope
+  :where(button, [href], input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--muses-color-focus);
+  outline-offset: 2px;
+}
+
+/* Design-system primitives, scoped to auth surfaces (see header note). */
+
+.auth-scope .muses-card {
+  min-width: 0;
+  padding: var(--muses-card-padding);
+  border: 1px solid var(--muses-color-border);
+  border-radius: var(--muses-radius-lg);
+  background: var(--muses-color-surface);
+  box-shadow: var(--muses-shadow-sm);
+}
+
+.auth-scope .muses-card[data-elevation="raised"] {
+  background: var(--muses-color-surface-raised);
+  box-shadow: var(--muses-shadow-md);
+}
+
+.auth-scope .muses-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--muses-space-3);
+  margin-bottom: var(--muses-space-4);
+}
+
+.auth-scope .muses-card__title {
+  margin: 0;
+  font-size: var(--muses-text-lg);
+  font-weight: var(--muses-weight-semibold);
+}
+
+.auth-scope .muses-card__description {
+  color: var(--muses-color-text-muted);
+}
+
+.auth-scope .muses-button {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: var(--muses-space-2);
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--muses-color-border-strong);
+  border-radius: var(--muses-radius-md);
+  background: var(--muses-color-surface);
+  color: var(--muses-color-text);
+  font-weight: var(--muses-weight-medium);
+  cursor: pointer;
+  transition:
+    background-color var(--muses-duration-fast) var(--muses-ease-standard),
+    border-color var(--muses-duration-fast) var(--muses-ease-standard),
+    transform var(--muses-duration-fast) var(--muses-ease-standard);
+}
+
+.auth-scope .muses-button:hover:not(:disabled) {
+  border-color: var(--muses-color-accent);
+}
+
+.auth-scope .muses-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.auth-scope .muses-button[data-variant="primary"] {
+  border-color: var(--muses-color-accent);
+  background: var(--muses-color-accent);
+  color: var(--muses-color-accent-contrast);
+}
+
+.auth-scope .muses-button[data-variant="danger"] {
+  border-color: var(--muses-color-danger);
+  color: var(--muses-color-danger);
+}
+
+.auth-scope .muses-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.auth-scope .muses-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 1.75rem;
+  padding-inline: 0.625rem;
+  border: 1px solid currentColor;
+  border-radius: var(--muses-radius-pill);
+  color: var(--muses-color-unknown);
+  font-size: var(--muses-text-xs);
+  font-weight: var(--muses-weight-semibold);
+  letter-spacing: 0.02em;
+}
+
+.auth-scope .muses-badge[data-tone="positive"] {
+  color: var(--muses-color-positive);
+}
+
+.auth-scope .muses-badge[data-tone="warning"] {
+  color: var(--muses-color-warning);
+}
+
+.auth-scope .muses-badge[data-tone="danger"] {
+  color: var(--muses-color-danger);
+}
+
+.auth-scope .muses-badge[data-tone="accent"] {
+  color: var(--muses-color-accent);
+}
+
+/* Auth page layout. */
+
+.auth-page {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: var(--muses-space-6) var(--muses-space-4);
+  background:
+    radial-gradient(circle at 20% 0%, rgb(49 94 251 / 8%), transparent 28rem),
+    var(--muses-color-bg);
+  color: var(--muses-color-text);
+}
+
+.auth-card {
+  width: min(100%, 26rem);
+  display: grid;
+  gap: var(--muses-space-4);
+}
+
+.auth-title {
+  margin: 0;
+  font-size: var(--muses-text-xl);
+  font-weight: var(--muses-weight-semibold);
+  letter-spacing: -0.02em;
+}
+
+.auth-done-title {
+  margin: 0;
+  font-size: var(--muses-text-lg);
+  font-weight: var(--muses-weight-semibold);
+}
+
+.auth-subtitle {
+  margin: 0;
+  color: var(--muses-color-text-muted);
+  font-size: var(--muses-text-sm);
+}
+
+.auth-form {
+  display: grid;
+  gap: var(--muses-space-4);
+}
+
+.auth-field {
+  display: grid;
+  gap: var(--muses-space-2);
+}
+
+.auth-field__label {
+  font-size: var(--muses-text-sm);
+  font-weight: var(--muses-weight-medium);
+}
+
+.auth-field__hint {
+  color: var(--muses-color-text-muted);
+  font-size: var(--muses-text-xs);
+}
+
+.auth-input {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--muses-color-border-strong);
+  border-radius: var(--muses-radius-md);
+  background: var(--muses-color-surface);
+  color: var(--muses-color-text);
+  font: inherit;
+}
+
+.auth-input:focus-visible {
+  outline: 3px solid
+    color-mix(in srgb, var(--muses-color-focus) 45%, transparent);
+  outline-offset: 1px;
+}
+
+.auth-code-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--muses-space-2);
+}
+
+.auth-code-row .auth-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.auth-error {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--muses-radius-md);
+  border: 1px solid
+    color-mix(in srgb, var(--muses-color-danger) 35%, transparent);
+  background: color-mix(in srgb, var(--muses-color-danger) 8%, transparent);
+  color: var(--muses-color-danger);
+  font-size: var(--muses-text-sm);
+}
+
+.auth-hint {
+  margin: 0;
+  color: var(--muses-color-positive);
+  font-size: var(--muses-text-sm);
+}
+
+.auth-devcode {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--muses-radius-md);
+  background: color-mix(in srgb, var(--muses-color-warning) 12%, transparent);
+  color: var(--muses-color-warning);
+  font-family: var(--muses-font-mono);
+  font-size: var(--muses-text-sm);
+}
+
+.auth-switch {
+  margin: 0;
+  text-align: center;
+  font-size: var(--muses-text-sm);
+}
+
+.auth-switch a,
+.auth-sessionbar__link {
+  color: var(--muses-color-accent);
+}
+
+.auth-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--muses-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--muses-text-sm);
+}
+
+.auth-steps li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--muses-space-2);
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--muses-color-border);
+  border-radius: var(--muses-radius-pill);
+  color: var(--muses-color-text-muted);
+}
+
+.auth-steps li[aria-current="step"] {
+  border-color: var(--muses-color-accent);
+  color: var(--muses-color-accent);
+  font-weight: var(--muses-weight-semibold);
+}
+
+/* Route gate: rendered over whichever surface wraps it, so keep it neutral. */
+.auth-gate {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+  color: inherit;
+  opacity: 0.75;
+}
+
+/* Slim session strip above the wrapped page (dashboard or settings). */
+.auth-sessionbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--muses-space-3);
+  padding: var(--muses-space-2) var(--muses-space-4);
+  border-bottom: 1px solid var(--muses-color-border);
+  background: var(--muses-color-surface);
+  color: var(--muses-color-text);
+  font-size: var(--muses-text-sm);
+}
+
+.auth-sessionbar__email {
+  font-weight: var(--muses-weight-medium);
+  overflow-wrap: anywhere;
+}
+
+.auth-sessionbar__signout {
+  min-height: 2rem;
+  padding: 0.25rem 0.625rem;
+  font-size: var(--muses-text-sm);
+}
+
+/* Admin table surface. */
+.auth-admin {
+  display: grid;
+  gap: var(--muses-space-4);
+  min-height: 100vh;
+  width: min(100% - 2rem, 72rem);
+  margin: 0 auto;
+  padding: var(--muses-space-6) 0;
+  background: var(--muses-color-bg);
+  color: var(--muses-color-text);
+}
+
+.auth-admin__header h1 {
+  margin: 0;
+  font-size: var(--muses-text-xl);
+  letter-spacing: -0.02em;
+}
+
+.auth-admin__header p {
+  margin: 0.25rem 0 0;
+  color: var(--muses-color-text-muted);
+  font-size: var(--muses-text-sm);
+}
+
+.auth-admin__state {
+  margin: 0;
+  color: var(--muses-color-text-muted);
+}
+
+.auth-admin-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--muses-space-3);
+}
+
+.auth-admin-stat {
+  padding: var(--muses-space-4);
+  border: 1px solid var(--muses-color-border);
+  border-radius: var(--muses-radius-lg);
+  background: var(--muses-color-surface);
+  text-align: center;
+}
+
+.auth-admin-stat__value {
+  margin: 0;
+  font-size: var(--muses-text-2xl);
+  font-weight: var(--muses-weight-semibold);
+}
+
+.auth-admin-stat__label {
+  margin: 0;
+  color: var(--muses-color-text-muted);
+  font-size: var(--muses-text-sm);
+}
+
+.auth-admin__tablewrap {
+  padding: 0;
+  overflow-x: auto;
+}
+
+.auth-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--muses-text-sm);
+}
+
+.auth-admin-table th {
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--muses-color-border);
+  color: var(--muses-color-text-muted);
+  font-size: var(--muses-text-xs);
+  font-weight: var(--muses-weight-semibold);
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.auth-admin-table td {
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--muses-color-border);
+  vertical-align: middle;
+}
+
+.auth-admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.auth-admin-table tbody tr[data-inactive="true"] {
+  opacity: 0.6;
+}
+
+.auth-user-cell {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.auth-user-cell__email {
+  color: var(--muses-color-text-muted);
+  font-size: var(--muses-text-xs);
+}
+
+.auth-admin-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--muses-space-2);
+  white-space: nowrap;
+}
+
+.auth-admin-actions .muses-button {
+  min-height: 2rem;
+  padding: 0.25rem 0.625rem;
+  font-size: var(--muses-text-sm);
+}
+
+.auth-admin__processing {
+  color: var(--muses-color-text-muted);
+  font-size: var(--muses-text-xs);
+}
+
+.auth-admin__empty {
+  padding: var(--muses-space-8);
+  text-align: center;
+}

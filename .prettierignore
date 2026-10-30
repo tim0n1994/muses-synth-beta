@@ -1,0 +1,26 @@
+# Generated lockfile — never hand-formatted
+pnpm-lock.yaml
+
+# Generated build output
+dist/
+
+# Sol orchestration bridge (state, prompts, harvested code, audit baselines)
+.ai-bridge/
+
+# Generated runtime state
+coverage/
+.vite/
+playwright-report/
+test-results/
+
+# V1 audio samples are binary assets, not formatted
+public/
+
+# Dispatch run artifacts are audit evidence, not source
+.dispatch-*/
+
+# v0.7 evidence records — forensic snapshots have sha256s pinned in the
+# library DB; measurement JSONs are recorded outputs, not source
+artifacts/
+spike/measure/
+spike/plan/

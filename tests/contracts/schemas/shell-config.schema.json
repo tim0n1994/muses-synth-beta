@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "muses://contracts/shell-config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "components"],
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "components": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "type", "props"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+          "type": {
+            "enum": [
+              "state.hero",
+              "belief.distribution",
+              "evidence.list",
+              "events.timeline",
+              "decision.card",
+              "audio.control",
+              "metrics.grid",
+              "privacy.status"
+            ]
+          },
+          "props": { "type": "object" }
+        }
+      }
+    }
+  }
+}

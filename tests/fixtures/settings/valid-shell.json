@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "0.1",
+  "components": [
+    {
+      "id": "state",
+      "type": "state.hero",
+      "props": { "showConfidence": true }
+    },
+    {
+      "id": "belief",
+      "type": "belief.distribution",
+      "props": { "showUnknown": true }
+    },
+    { "id": "evidence", "type": "evidence.list", "props": { "limit": 8 } },
+    { "id": "events", "type": "events.timeline", "props": { "limit": 20 } },
+    {
+      "id": "decision",
+      "type": "decision.card",
+      "props": { "showReversibility": true }
+    },
+    {
+      "id": "audio",
+      "type": "audio.control",
+      "props": { "manualOverride": true }
+    },
+    { "id": "metrics", "type": "metrics.grid", "props": { "columns": 3 } },
+    {
+      "id": "privacy",
+      "type": "privacy.status",
+      "props": { "showRetention": true }
+    }
+  ]
+}

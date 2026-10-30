@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "muses://contracts/effect-data",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["effectId", "status", "reversible", "actionType", "createdAt"],
+  "properties": {
+    "effectId": { "type": "string", "pattern": "^efx_[A-Za-z0-9_-]{4,120}$" },
+    "status": { "enum": ["applied", "reverted", "no_action"] },
+    "reversible": { "type": "boolean" },
+    "actionType": {
+      "enum": ["audio.manual_override", "effect.revert", "NO_ACTION"]
+    },
+    "createdAt": { "type": "string" },
+    "revertToken": { "type": "string", "minLength": 8, "maxLength": 256 }
+  }
+}

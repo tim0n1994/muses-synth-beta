@@ -1,0 +1,5 @@
+{"specversion":"1.0","id":"evt_belief_0001","source":"urn:muses:e2e-replay","type":"muses.editor.activity","subject":"workspace:e2e","time":"2026-07-31T00:00:00.000Z","data":{"action":"edit"}}
+{"specversion":"1.0","id":"evt_belief_0002","source":"urn:muses:e2e-replay","type":"muses.editor.activity","subject":"workspace:e2e","time":"2026-07-31T00:02:00.000Z","data":{"action":"save"}}
+{"specversion":"1.0","id":"evt_belief_0003","source":"urn:muses:e2e-replay","type":"muses.editor.activity","subject":"workspace:e2e","time":"2026-07-31T00:04:00.000Z","data":{"action":"edit"}}
+{"specversion":"1.0","id":"evt_belief_0004","source":"urn:muses:e2e-replay","type":"muses.test.run.completed","subject":"workspace:e2e","time":"2026-07-31T00:05:00.000Z","data":{"status":"passed","failed":0,"total":20}}
+{"specversion":"1.0","id":"evt_belief_0005","source":"urn:muses:e2e-replay","type":"muses.test.run.completed","subject":"workspace:e2e","time":"2026-07-31T00:08:00.000Z","data":{"status":"passed","failed":0,"total":20}}

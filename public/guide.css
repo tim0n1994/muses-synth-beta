@@ -1,0 +1,68 @@
+/* Muses guide standalone styles */
+
+#muses-guide { font-size: var(--font-size-base); line-height: 1.75; }
+#muses-guide.zh .en { display: none; }
+#muses-guide.en .zh { display: none; }
+#muses-guide .mg-hero { padding: 20px 0 6px; }
+#muses-guide .mg-hero h1 { margin: 0 0 6px; font-weight: 500; }
+#muses-guide .mg-sub { color: var(--muted-foreground); margin: 0; }
+#muses-guide .mg-langrow { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin: 6px 0 0; }
+#muses-guide .mg-lang { display: flex; gap: 6px; align-items: center; }
+#muses-guide .mg-lang .lbl { color: var(--muted-foreground); font-size: 13px; margin-right: 2px; }
+#muses-guide .mg-lang button { border: 1px solid var(--border); background: var(--muted); color: var(--foreground); border-radius: 999px; padding: 3px 14px; font-size: 13px; cursor: pointer; }
+#muses-guide .mg-lang button[aria-pressed="true"] { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+#muses-guide .mg-toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; padding: 0; list-style: none; }
+#muses-guide .mg-toc a { color: var(--primary); text-decoration: none; }
+#muses-guide .mg-toc li { background: var(--muted); border-radius: 999px; padding: 3px 12px; font-size: 13px; }
+#muses-guide h2 { margin: 40px 0 4px; padding-top: 8px; font-weight: 500; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+#muses-guide h2 .mg-no { color: var(--muted-foreground); font-size: 14px; font-weight: 400; }
+#muses-guide h3 { margin: 22px 0 4px; font-weight: 500; }
+#muses-guide p { margin: 8px 0; }
+#muses-guide figure { margin: 14px 0; }
+#muses-guide figure img { max-width: 100%; border: 1px solid var(--border); border-radius: 10px; display: block; }
+#muses-guide figcaption { color: var(--muted-foreground); font-size: 12px; margin-top: 6px; }
+#muses-guide .mg-step { display: flex; gap: 12px; margin: 14px 0; align-items: flex-start; }
+#muses-guide .mg-step-no { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); display: flex; align-items: center; justify-content: center; font-size: 14px; margin-top: 3px; }
+#muses-guide .mg-promise { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 14px 0; }
+#muses-guide .mg-promise .card { margin: 0; }
+#muses-guide .mg-promise .card h3 { margin: 2px 0 4px; font-size: 14px; }
+#muses-guide .mg-promise .card p { margin: 0; color: var(--muted-foreground); font-size: 13px; }
+#muses-guide pre { background: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+#muses-guide code { font-size: 13px; }
+#muses-guide .mg-tip { border-left: 3px solid var(--primary); padding: 8px 14px; margin: 14px 0; background: var(--muted); border-radius: 0 8px 8px 0; }
+#muses-guide .mg-warn { border-left: 3px solid var(--orange); padding: 8px 14px; margin: 14px 0; background: var(--muted); border-radius: 0 8px 8px 0; }
+#muses-guide .mg-tip p, #muses-guide .mg-warn p { margin: 4px 0; font-size: 13px; }
+#muses-guide .mg-anno { list-style: none; padding: 0; margin: 10px 0; }
+#muses-guide .mg-anno li { padding: 6px 0 6px 26px; position: relative; border-bottom: 1px solid var(--border); }
+#muses-guide .mg-anno li:last-child { border-bottom: none; }
+#muses-guide .mg-anno b.mk { position: absolute; left: 0; top: 7px; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); color: var(--primary-foreground); font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+#muses-guide details { border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin: 8px 0; }
+#muses-guide details summary { cursor: pointer; font-weight: 500; }
+#muses-guide details p { font-size: 13px; color: var(--muted-foreground); }
+#muses-guide .mg-flow { margin: 16px 0; }
+#muses-guide .mg-foot { margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--border); color: var(--muted-foreground); font-size: 12px; }
+#muses-guide i[data-lucide] { width: 18px; height: 18px; }
+
+
+/* standalone theme (production site has strict CSP; this file is external by design) */
+:root {
+  --font-size-base: 15px;
+  --background: #f6f7fb; --foreground: #1d2433;
+  --card: #ffffff; --card-foreground: #1d2433;
+  --muted: #edf0f7; --muted-foreground: #5a6478;
+  --primary: #6c8cff; --primary-foreground: #ffffff;
+  --border: #dee3ee; --orange: #c2600d; --viz-series-1: #4f7df9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #141824; --foreground: #e7eaf3;
+    --card: #1b2131; --card-foreground: #e7eaf3;
+    --muted: #232a3d; --muted-foreground: #9ba4bb;
+    --primary: #7d9dff; --primary-foreground: #101522;
+    --border: #2c3448; --orange: #e8963f; --viz-series-1: #7d9dff;
+  }
+}
+body { margin: 0; background: var(--background); color: var(--foreground); }
+#muses-guide { max-width: 980px; margin: 0 auto; padding: 0 20px 60px; }
+i[data-lucide] { display: none; }
+#muses-guide, #muses-guide * { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans CJK SC', sans-serif; }

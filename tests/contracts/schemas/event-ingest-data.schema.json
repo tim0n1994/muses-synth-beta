@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "muses://contracts/event-ingest-data",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["accepted", "eventId", "sequence"],
+  "properties": {
+    "accepted": { "const": true },
+    "eventId": { "type": "string", "pattern": "^evt_[A-Za-z0-9_-]{4,120}$" },
+    "sequence": { "type": "integer", "minimum": 1 }
+  }
+}

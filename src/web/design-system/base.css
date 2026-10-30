@@ -1,0 +1,113 @@
+@import "./tokens.css";
+
+.muses-root {
+  min-width: 0;
+  min-height: 100%;
+  box-sizing: border-box;
+  background: var(--muses-color-bg);
+  color: var(--muses-color-text);
+  font-family: var(--muses-font-sans);
+  font-size: var(--muses-text-md);
+  line-height: var(--muses-line-normal);
+  text-rendering: optimizeLegibility;
+}
+
+.muses-root *,
+.muses-root *::before,
+.muses-root *::after {
+  box-sizing: inherit;
+}
+
+.muses-root button,
+.muses-root input,
+.muses-root select,
+.muses-root textarea {
+  font: inherit;
+}
+
+.muses-root
+  :where(button, [href], input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--muses-color-focus);
+  outline-offset: 3px;
+}
+
+.muses-root :where(h1, h2, h3, p, ul, ol, dl) {
+  margin-block-start: 0;
+}
+
+.muses-root :where(h1, h2, h3) {
+  line-height: var(--muses-line-tight);
+  text-wrap: balance;
+}
+
+.muses-root .muses-page {
+  width: min(100%, var(--muses-container-max));
+  margin-inline: auto;
+  padding: var(--muses-space-4);
+}
+
+.muses-root .muses-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--muses-grid-gap);
+  align-items: start;
+}
+
+.muses-root .muses-dashboard-section {
+  min-width: 0;
+  grid-column: span var(--muses-col-sm, 4);
+  order: var(--muses-order, 0);
+}
+
+.muses-root .muses-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (min-width: 48rem) {
+  .muses-root .muses-page {
+    padding: var(--muses-space-6);
+  }
+
+  .muses-root .muses-dashboard-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .muses-root .muses-dashboard-section {
+    grid-column: span var(--muses-col-md, 4);
+  }
+}
+
+@media (min-width: 72rem) {
+  .muses-root .muses-dashboard-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .muses-root .muses-dashboard-section {
+    grid-column: span var(--muses-col-lg, 4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .muses-root *,
+  .muses-root *::before,
+  .muses-root *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .muses-root :where(button, input, [role="switch"], [role="progressbar"]) {
+    forced-color-adjust: auto;
+  }
+}

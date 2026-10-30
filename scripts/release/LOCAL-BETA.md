@@ -1,0 +1,53 @@
+# Compiled synth beta bundle
+
+This is the MIT, single-user, loopback-only synthetic soundscape beta for Node
+22.13+ (below 23) and pnpm 11.4.0. Linux/macOS are target platforms; check the
+release evidence for the platforms actually tested. Windows requires WSL2.
+The v0.7/replay recording library is **not delivered or covered**. SPA shell route
+checks are not recording-library acceptance. No public/audio directory or audio
+HTTP fetch is required for Web Audio synthesis.
+
+Check SHA256SUMS before extraction. Inside the extracted directory:
+
+```sh
+node runtime.mjs install
+node runtime.mjs start
+# In another terminal, explicitly opt a project into observation:
+node runtime.mjs watch --dir /path/to/your/project --server http://127.0.0.1:3001
+```
+
+Install uses the frozen lockfile and approved native dependency builds; it needs
+registry access unless all packages are cached (`install --offline`). No source
+compiler or dev dependencies are required. Browser sound requires a user gesture.
+The watcher sends activity metadata without relative file paths by default;
+the watched directory's basename is still included in the event subject.
+Relative file paths require explicit opt-in.
+
+Start clears inherited `MUSES_` and `LLM_` settings, binds loopback, disables
+authentication and v0.7, and keeps its own private `.muses` directory. It
+refuses an unmarked, linked, shared or mismatched existing database. The marker
+protects against accidental adoption; it is not a cryptographic guarantee
+against someone who can change local files. Preview bundles are explicitly
+marked and are not tagged release provenance.
+
+Maintainers: `pnpm build`, then `pnpm release:package --local-preview --out NEW_DIR`
+works in an initialized Git repository without HEAD. Rebuild after any source change. A non-preview package requires
+a clean checkout, a build from that same checkout, full `--sha`, and an existing
+`--tag vPACKAGE_VERSION` resolving to that SHA. No fixed historical baseline is
+required. `pnpm release:smoke ASSET_DIR NEW_EVIDENCE_DIR` verifies hashes, installs
+in a fresh directory, starts compiled code, checks HTTP health/assets, ingests a
+real watched filesystem edit, and rejects a foreign database unchanged. An
+incomplete smoke run is not installation/runtime acceptance.
+
+CI and the manually dispatched release workflow upload compiled assets only.
+They do not publish an npm package or a GitHub release. Public publication needs
+separate explicit authorization and verification of tag/SHA/assets. Run the full
+CI gates before using the release workflow; do not bypass failed tests or audit.
+
+`THIRD-PARTY-NOTICES.md` is included verbatim as a draft (176 production dependency
+versions, 175 local license texts and one upstream-linked license text).
+`THIRD-PARTY-NOTICES.txt` additionally inventories this machine's installed build
+graph. Neither file proves license closure: Linux platform packages, frontend
+bundling and native components still require review before public distribution.
+Non-preview packaging refuses a notice still marked DRAFT; removing that marker
+is a human review decision, not proof produced by the packaging script.

@@ -1,0 +1,12 @@
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
+  msw: false
+
+# Transitive security patches. Each entry is a same-major patch bump published
+# by the upstream advisory; drop the entry once a direct dependency pulls the
+# fixed version on its own. See .ai-bridge/audit-baseline.json for the gate.
+overrides:
+  fast-uri@3: 3.1.9
+  fast-uri@4: 4.2.3
+  brace-expansion@5: 5.0.12

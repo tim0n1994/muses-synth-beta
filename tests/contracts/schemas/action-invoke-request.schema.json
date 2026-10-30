@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "muses://contracts/action-invoke-request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["idempotencyKey", "action", "reason"],
+  "properties": {
+    "idempotencyKey": { "type": "string", "minLength": 8, "maxLength": 128 },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "payload"],
+      "properties": {
+        "type": { "enum": ["audio.manual_override", "effect.revert"] },
+        "payload": { "type": "object" }
+      }
+    },
+    "reason": { "type": "string", "minLength": 1, "maxLength": 250 }
+  }
+}
