@@ -19,7 +19,6 @@ interface PersonalSpaceApp {
 }
 
 const cleanups: Array<() => Promise<void>> = [];
-let previousDatabasePath: string | undefined;
 
 afterEach(async () => {
   while (cleanups.length > 0) {
@@ -32,7 +31,7 @@ afterEach(async () => {
 
 const buildApp = async (auth: AuthConfig | null): Promise<PersonalSpaceApp> => {
   const directory = mkdtempSync(join(tmpdir(), "muses-personal-space-"));
-  previousDatabasePath = process.env.MUSES_DATABASE_PATH;
+  const previousDatabasePath = process.env.MUSES_DATABASE_PATH;
   process.env.MUSES_DATABASE_PATH = join(directory, "muses.sqlite");
   const runtime = await buildRuntimeModules({ auth });
   const app = await createApp({
@@ -131,6 +130,38 @@ const listEventIds = async (
 };
 
 describe("personal space (v0.6 multi-user isolation)", () => {
+  it("preserves external Host access only when the real auth module is installed", async () => {
+    const local = await buildApp(null);
+    const denied = await local.app.inject({
+      headers: { host: "muses.example:443" },
+      method: "GET",
+      url: "/api/health",
+    });
+    expect(denied.statusCode).toBe(403);
+
+    const secured = await buildApp(enabledAuthConfig());
+    const anonymous = await secured.app.inject({
+      headers: { host: "muses.example:443" },
+      method: "GET",
+      url: "/api/v1/context/events?limit=1",
+    });
+    expect(anonymous.statusCode).toBe(401);
+    const session = await registerViaApi(
+      secured.app,
+      "host-test@example.com",
+      "secret1",
+    );
+    const authenticated = await secured.app.inject({
+      headers: {
+        authorization: `Bearer ${session.token}`,
+        host: "muses.example:443",
+      },
+      method: "GET",
+      url: "/api/v1/context/events?limit=1",
+    });
+    expect(authenticated.statusCode).toBe(200);
+  });
+
   // Full app + two registered users (bcrypt) + migrations: generous timeout
   // because the parallel suite loads a small host.
   it(

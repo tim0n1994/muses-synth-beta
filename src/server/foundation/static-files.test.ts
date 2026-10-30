@@ -47,6 +47,20 @@ async function makeStaticApp(
 }
 
 describe("production static serving", () => {
+  it.each(["/index.html", "/dashboard/deep-link"])(
+    "rejects an untrusted Host before serving %s",
+    async (url) => {
+      const { app } = await makeStaticApp();
+      const response = await app.inject({
+        headers: { accept: "text/html", host: "rebind.example:3001" },
+        method: "GET",
+        url,
+      });
+      expect(response.statusCode).toBe(403);
+      expect(response.body).not.toContain("Muses test shell");
+    },
+  );
+
   it("serves the SPA shell for an HTML deep link", async () => {
     const { app } = await makeStaticApp();
     const response = await app.inject({

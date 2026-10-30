@@ -87,7 +87,12 @@ export async function createApp(
   // Fastify 5's factory infers Http2SecureServer generics; cast to the standard RawServerDefault shape
 
   installErrorHandling(app, config.mode === "production");
-  await registerSecurity(app, config);
+  // The built module graph is the source of truth: auth may be explicitly
+  // supplied or disabled independently of environment variables.
+  const hasAuth = (options.modules ?? []).some(
+    (module) => module.name === "auth",
+  );
+  await registerSecurity(app, config, !hasAuth);
   await app.register(healthRoutes, { version: config.appVersion });
 
   for (const module of options.modules ?? []) {

@@ -1,8 +1,9 @@
 # Security
 
 Muses is a single-user local beta. The default unauthenticated API listens on
-loopback; other processes on the same computer can reach it. Do not expose that
-API through a public tunnel or proxy.
+loopback and rejects requests with a non-loopback Host. Other processes on the
+same computer can still reach it. Do not expose that API through a public tunnel
+or proxy.
 
 ## Reporting a vulnerability
 

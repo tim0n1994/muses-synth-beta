@@ -1,3 +1,5 @@
+import { isIP } from "node:net";
+
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import type { FastifyInstance, FastifyRequest } from "fastify";
@@ -7,6 +9,32 @@ import { MusesHttpError } from "./errors.js";
 
 const MUTATION_METHODS = new Set(["DELETE", "PATCH", "POST", "PUT"]);
 const JSON_BODY_METHODS = new Set(["PATCH", "POST", "PUT"]);
+
+function hasLoopbackHost(request: FastifyRequest): boolean {
+  const rawHeaders = request.raw.rawHeaders;
+  let count = 0;
+  for (let index = 0; index < rawHeaders.length; index += 2) {
+    if (rawHeaders[index]?.toLowerCase() === "host") count += 1;
+  }
+  if (count !== 1 || typeof request.headers.host !== "string") return false;
+  const match =
+    /^(localhost|127\.0\.0\.1|\[[0-9a-f:.]+\])(?::([0-9]{1,5}))?$/i.exec(
+      request.headers.host,
+    );
+  if (!match) return false;
+  if (
+    match[2] !== undefined &&
+    (Number(match[2]) < 1 || Number(match[2]) > 65535)
+  ) {
+    return false;
+  }
+  const host = match[1]?.toLowerCase();
+  if (host === undefined) return false;
+  if (!host.startsWith("[")) return true;
+  const address = host.slice(1, -1);
+  if (isIP(address) !== 6) return false;
+  return new URL(`http://${host}`).hostname === "[::1]";
+}
 
 function requestOrigin(request: FastifyRequest): string | undefined {
   const origin: unknown = request.headers.origin;
@@ -47,8 +75,25 @@ function isApiRequest(request: FastifyRequest): boolean {
 export async function registerSecurity(
   app: FastifyInstance,
   config: RuntimeConfig,
+  enforceLoopbackHost: boolean,
 ): Promise<void> {
   const allowedOrigins = new Set(config.allowedOrigins);
+
+  if (enforceLoopbackHost) {
+    // Check all requests before CORS can answer preflight or static fallback.
+    // A forged Host can otherwise expose unauthenticated local GET responses
+    // to a browser after DNS rebinding, even if mutation Origins are checked.
+    // eslint-disable-next-line @typescript-eslint/require-await -- Fastify hook registration preserves its async contract.
+    app.addHook("onRequest", async (request) => {
+      if (!hasLoopbackHost(request)) {
+        throw new MusesHttpError({
+          code: "HOST_NOT_ALLOWED",
+          message: "Host is not a loopback address",
+          statusCode: 403,
+        });
+      }
+    });
+  }
 
   await app.register(helmet, {
     crossOriginEmbedderPolicy: false,
