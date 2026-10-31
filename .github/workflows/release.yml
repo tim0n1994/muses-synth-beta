@@ -67,6 +67,14 @@ jobs:
           SHA: ${{ inputs.sha }}
         run: pnpm release:package --tag "$TAG" --sha "$SHA" --out "${RUNNER_TEMP}/release-assets"
       - run: pnpm release:smoke "${RUNNER_TEMP}/release-assets" "${RUNNER_TEMP}/release-smoke"
+      - name: Preserve isolated release smoke diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: release-smoke-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/release-smoke/
+          if-no-files-found: ignore
+          retention-days: 7
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: compiled-synth-release-${{ github.sha }}
