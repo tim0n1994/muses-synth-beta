@@ -314,7 +314,7 @@ export function loadRuntimeConfig(
 
   const candidate = {
     allowedOrigins,
-    appVersion: "0.3.2-beta.1",
+    appVersion: "0.3.2",
     bodyLimitBytes: readInteger(
       raw.MUSES_BODY_LIMIT_BYTES,
       DEFAULT_BODY_LIMIT_BYTES,

@@ -7,7 +7,8 @@ The v0.7/replay recording library is **not delivered or covered**. SPA shell rou
 checks are not recording-library acceptance. No public/audio directory or audio
 HTTP fetch is required for Web Audio synthesis.
 
-Check SHA256SUMS before extraction. Inside the extracted directory:
+Check SHA256SUMS before extraction; it covers the archive and every separately
+downloadable license, notice and release manifest. Inside the extracted directory:
 
 ```sh
 node runtime.mjs install
@@ -49,8 +50,8 @@ GitHub release. Public publication needs authorization and verification of
 tag/SHA/assets. Run the full CI gates before using the release
 workflow; do not bypass failed tests or audit.
 
-`THIRD-PARTY-NOTICES.md` is included verbatim as a draft (176 production dependency
-versions, 175 local license texts and one upstream-linked license text).
+`THIRD-PARTY-NOTICES.md` is included verbatim as a draft (177 production dependency
+versions, 176 local license texts and one upstream-linked license text).
 `THIRD-PARTY-NOTICES.txt` additionally inventories this machine's installed build
 graph. Neither file proves license closure: Linux platform packages, frontend
 bundling and native components still require review before public distribution.

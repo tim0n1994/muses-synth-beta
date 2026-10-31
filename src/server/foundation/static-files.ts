@@ -13,20 +13,25 @@ import {
 
 function acceptsHtml(header: string | string[] | undefined): boolean {
   const value = Array.isArray(header) ? header.join(",") : header;
-  // Accept text/html or */* (curl default): any GET to a non-API path gets
-  // the SPA shell. Only explicit non-HTML Accept values (e.g. application/json)
-  // bypass the fallback. This fixes the P0 where bare curl got 404.
+  // Accept text/html or */* (curl default) for non-API, non-asset routes.
+  // Explicit non-HTML Accept values bypass the SPA fallback.
   if (value === undefined || value === "") return true;
-  return (
-    value.includes("text/html") ||
-    value.includes("*/*") ||
-    !value.includes("application/json")
-  );
+  return value.toLowerCase().includes("text/html") || value.includes("*/*");
 }
 
 function isApiPath(url: string): boolean {
   const path = url.split("?", 1)[0] ?? url;
   return path === "/api" || path.startsWith("/api/");
+}
+
+function isAssetPath(url: string): boolean {
+  const raw = url.split("?", 1)[0] ?? url;
+  try {
+    const path = decodeURIComponent(raw);
+    return path === "/assets" || path.startsWith("/assets/");
+  } catch {
+    return true;
+  }
 }
 
 /**
@@ -109,6 +114,7 @@ export async function registerStaticFiles(
     if (
       request.method === "GET" &&
       !isApiPath(request.url) &&
+      !isAssetPath(request.url) &&
       acceptsHtml(request.headers.accept)
     ) {
       if (injectedShell !== null && v07Access.allows(request.user?.id)) {

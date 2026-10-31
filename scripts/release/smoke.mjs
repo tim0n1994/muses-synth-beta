@@ -14,6 +14,8 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { once } from "node:events";
 import { setTimeout } from "node:timers/promises";
+import { verifyAssetChecksums } from "./asset-checksums.mjs";
+import { classifySmokeFailure } from "./smoke-diagnostics.mjs";
 
 const [assetsArg, evidenceArg] = process.argv.slice(2);
 if (!assetsArg || !evidenceArg)
@@ -21,16 +23,8 @@ if (!assetsArg || !evidenceArg)
 const assets = resolve(assetsArg);
 const evidence = resolve(evidenceArg);
 mkdirSync(evidence);
-const checksum = readFileSync(join(assets, "SHA256SUMS"), "utf8").trim();
-const match = /^([a-f0-9]{64}) {2}(muses-[a-zA-Z0-9.-]+\.tar\.gz)$/.exec(
-  checksum,
-);
-assert(match, "Invalid SHA256SUMS");
-const archive = join(assets, match[2]);
-assert.equal(
-  createHash("sha256").update(readFileSync(archive)).digest("hex"),
-  match[1],
-);
+const assetSet = verifyAssetChecksums(assets);
+const archive = join(assets, assetSet.archive);
 const members = execFileSync("tar", ["-tzf", archive], { encoding: "utf8" })
   .trim()
   .split("\n");
@@ -48,6 +42,13 @@ assert.deepEqual(
   JSON.parse(readFileSync(join(assets, "release.json"), "utf8")),
   "External provenance must match the checksummed archive",
 );
+for (const file of assetSet.sidecars) {
+  assert.deepEqual(
+    readFileSync(join(assets, file)),
+    readFileSync(join(bundle, file)),
+    `External asset must match the archived copy: ${file}`,
+  );
+}
 for (const { path: file, sha256: hash } of manifest.files) {
   assert(!file.startsWith("/") && !file.split("/").includes(".."));
   assert.equal(
@@ -116,6 +117,14 @@ async function run(command, args, log, extra = {}) {
   const [code] = await once(child, "exit");
   output.end();
   await once(output, "finish");
+  if (code !== 0) {
+    const categories = classifySmokeFailure(
+      readFileSync(join(evidence, log), "utf8"),
+    );
+    console.error(
+      `Isolated smoke ${log} failed; diagnostic categories: ${categories.join(", ") || "unclassified"}`,
+    );
+  }
   assert.equal(code, 0, `${command} ${args.join(" ")} (see ${log})`);
 }
 await run(

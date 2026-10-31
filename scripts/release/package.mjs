@@ -11,8 +11,9 @@ import {
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { parseArgs } from "node:util";
-import { git, hash, inventory, root, verifyBuild } from "../build-identity.mjs";
+import { git, inventory, root, verifyBuild } from "../build-identity.mjs";
 import { createArchive } from "./archive.mjs";
+import { writeAssetChecksums } from "./asset-checksums.mjs";
 import { withoutAuditExemptions } from "./dependency-policy.mjs";
 import { assertNoticeReady } from "./notice-policy.mjs";
 const { values } = parseArgs({
@@ -106,7 +107,7 @@ const licenses = JSON.parse(
   }),
 );
 let notices =
-  "Third-party dependencies (server, browser and build graph)\nDRAFT: installed local graph only. Linux, browser build and native component licensing remain unverified. See THIRD-PARTY-NOTICES.md.\n\n";
+  "Third-party dependencies (server, browser and build graph)\nSupplemental inventory of the build host; see THIRD-PARTY-NOTICES.md for the review status and scope.\n\n";
 for (const entries of Object.values(licenses))
   for (const entry of entries) {
     notices += `${entry.name} ${entry.versions.join(", ")} — ${entry.license}\n${entry.author ?? ""}\n${entry.homepage ?? ""}\n`;
@@ -161,10 +162,6 @@ execFileSync(
 );
 const archive = `${name}.tar.gz`;
 createArchive(join(out, archive), stage, name);
-writeFileSync(
-  join(out, "SHA256SUMS"),
-  `${hash(readFileSync(join(out, archive)))}  ${archive}\n`,
-);
 for (const file of [
   "release.json",
   "LICENSE",
@@ -172,4 +169,5 @@ for (const file of [
   "THIRD-PARTY-NOTICES.txt",
 ])
   cpSync(join(bundle, file), join(out, file));
+writeAssetChecksums(out, archive);
 console.log(JSON.stringify({ out, bundle, local_preview: preview }));

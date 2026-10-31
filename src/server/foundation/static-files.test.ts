@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -31,6 +31,11 @@ async function makeStaticApp(
     join(staticRoot, "index.html"),
     "<!doctype html><head></head><title>Muses test shell</title>",
   );
+  await mkdir(join(staticRoot, "assets", "nested"), { recursive: true });
+  await writeFile(
+    join(staticRoot, "assets", "nested", "fixture.js"),
+    "globalThis.musesStaticFixture = true;\n",
+  );
 
   const app = await createApp({
     config: loadRuntimeConfig({
@@ -47,6 +52,48 @@ async function makeStaticApp(
 }
 
 describe("production static serving", () => {
+  it("registers nested assets and preserves SPA fallback with the patched glob", async () => {
+    const { app } = await makeStaticApp();
+    const asset = await app.inject({
+      method: "GET",
+      url: "/assets/nested/fixture.js",
+    });
+    expect(asset.statusCode).toBe(200);
+    expect(asset.body).toBe("globalThis.musesStaticFixture = true;\n");
+    expect(asset.headers["content-type"]).toContain("javascript");
+    const head = await app.inject({
+      method: "HEAD",
+      url: "/assets/nested/fixture.js",
+    });
+    expect(head.statusCode).toBe(200);
+    expect(head.body).toBe("");
+    const missing = await app.inject({
+      method: "GET",
+      url: "/assets/nested/missing.js",
+      headers: { accept: "application/javascript" },
+    });
+    expect(missing.statusCode).toBe(404);
+    const missingWithBrowserAccept = await app.inject({
+      method: "GET",
+      url: "/assets/nested/missing.js",
+      headers: { accept: "*/*" },
+    });
+    expect(missingWithBrowserAccept.statusCode).toBe(404);
+    const nonHtmlRoute = await app.inject({
+      method: "GET",
+      url: "/dashboard/deep-link",
+      headers: { accept: "application/javascript" },
+    });
+    expect(nonHtmlRoute.statusCode).toBe(404);
+    const page = await app.inject({
+      method: "GET",
+      url: "/dashboard/deep-link",
+      headers: { accept: "text/html" },
+    });
+    expect(page.statusCode).toBe(200);
+    expect(page.body).toContain("Muses test shell");
+  });
+
   it.each(["/index.html", "/dashboard/deep-link"])(
     "rejects an untrusted Host before serving %s",
     async (url) => {

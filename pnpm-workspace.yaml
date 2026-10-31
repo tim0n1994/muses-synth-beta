@@ -3,10 +3,12 @@ allowBuilds:
   esbuild: true
   msw: false
 
-# Transitive security patches. Each entry is a same-major patch bump published
-# by the upstream advisory; drop the entry once a direct dependency pulls the
-# fixed version on its own. See .ai-bridge/audit-baseline.json for the gate.
+# Transitive security patches. Drop each override once the direct dependency
+# accepts a fixed version. @fastify/static still requests glob 13; the scoped
+# glob 14 override crosses a major boundary and must pass static-serving tests.
 overrides:
+  "@fastify/static>glob": 14.0.2
+  "glob@14>minimatch": 11.0.1
   fast-uri@3: 3.1.9
   fast-uri@4: 4.2.3
   brace-expansion@5: 5.0.12

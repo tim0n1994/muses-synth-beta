@@ -47,7 +47,7 @@ describe("createApp", () => {
     expect(response.json()).toMatchObject({
       service: "muses",
       status: "ok",
-      version: "0.3.2-beta.1",
+      version: "0.3.2",
     });
   });
 

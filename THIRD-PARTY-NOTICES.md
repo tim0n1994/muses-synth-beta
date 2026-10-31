@@ -4,9 +4,10 @@ Prepared: 2026-10-31. Scope: the current macOS installation of this public synth
 
 ## Status and scope
 
-This draft inventories **176 distinct production dependency name/version pairs (170 names)** reported by `pnpm licenses list --json --prod` and verified against each installed package's `package.json`. Multiple versions of a name are separate entries. Packages included by the production graph, including peer/type dependencies, are retained even if their names look like development tools. The project's own selected MIT license is separate and does not replace third-party terms.
+This draft inventories **177 distinct production dependency name/version pairs (171 names)** reported by `pnpm licenses list --json --prod` and verified against each installed package's `package.json`. Multiple versions of a name are separate entries. Packages included by the production graph, including peer/type dependencies, are retained even if their names look like development tools. The project's own selected MIT license is separate and does not replace third-party terms.
 
-**175 package/version entries have local license text reproduced below; one
+**176 package/version entries have local license text reproduced below or
+cross-referenced to identical reproduced text; one
 additional notice was retrieved from its versioned upstream README's license
 link. This is an inventory and notice draft, not a completed copyright
 clearance or a release approval.** No copyright holder or year has been
@@ -18,8 +19,10 @@ Generated frontend bundles may contain third-party code contributed by build too
 
 For the inspected macOS build, six emitted JavaScript source maps referenced 19
 distinct installed packages; all 19 name/version pairs have entries below, and
-none of the mapped package sources were unresolved. This does not establish
-complete CSS, dynamic-content or other-platform notice coverage.
+none of the mapped package sources were unresolved. An instrumented rebuild
+produced a byte-identical CSS asset from four project CSS files, with no
+third-party CSS modules, external imports, URLs or font faces. These findings
+do not establish complete dynamic-content or other-platform notice coverage.
 
 Native binaries and their embedded components also require artifact-level verification. For example, the installed `better-sqlite3@13.0.1` package includes native prebuilds for multiple operating systems; its reproduced package-level MIT license does not establish the provenance or complete notices of every embedded component. Verify the exact shipped native binaries and any SQLite or other embedded component notices. No original music, audio recordings, private data or private history is reproduced here.
 
@@ -37,18 +40,102 @@ contents or license status of every native prebuild or other embedded component.
 - Inline source headers, README attribution sections, embedded binaries and generated artifacts have not received an exhaustive attribution audit. Absence of a separate NOTICE file is not proof that no other obligations exist.
 - Public upstream names, email addresses and URLs appearing inside the original license texts are retained as attribution. No author/year has been invented. No local absolute paths or raw pnpm JSON paths are included.
 
+## Build runtime and embedded database evidence
+
+The browser build emits a `rolldown-runtime` helper without a source map. The
+installed build tool is `rolldown@1.1.5`, MIT, whose package license and
+[versioned third-party license file](https://github.com/rolldown/rolldown/blob/v1.1.5/THIRD-PARTY-LICENSE)
+are reproduced below. The upstream third-party file is SHA-256
+`a877291d800ed43692f3f9ae09d8e01cc6f7293ad39d43896059c188ffbb8b7c`.
+Including these notices is conservative; the unmapped helper has not been
+proven to contain every upstream component listed here.
+
+### Rolldown package license
+
+```text
+MIT License
+
+Copyright (c) 2024-present VoidZero Inc. & Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+end of terms and conditions
+
+The licenses of externally maintained libraries from which parts of the Software is derived are listed [here](https://github.com/rolldown/rolldown/blob/main/THIRD-PARTY-LICENSE).
+```
+
+### Rolldown upstream third-party licenses
+
+```text
+The MIT License (MIT)
+
+Copyright (c) 2017 [these people](https://github.com/rollup/rollup/graphs/contributors)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+MIT License
+
+Copyright (c) 2020 Evan Wallace
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+`better-sqlite3@13.0.1` includes SQLite amalgamation version 3.53.3 in the
+inspected macOS and Linux ARM64 builds. SQLite describes its core as public
+domain; see its [copyright statement](https://www.sqlite.org/copyright.html).
+This observation does not independently clear every platform binary or optional
+component. The `better-sqlite3` package retains its own MIT notice below.
+
 ## Counts
 
 | Declared SPDX identifier | Package/version entries |
 | ------------------------ | ----------------------: |
 | BSD-2-Clause             |                       1 |
 | BSD-3-Clause             |                       5 |
-| BlueOak-1.0.0            |                       5 |
+| BlueOak-1.0.0            |                       6 |
 | ISC                      |                      10 |
 | MIT                      |                     155 |
-| **Total**                |                 **176** |
+| **Total**                |                 **177** |
 
-Local legal-text files reproduced: **175**. The one package without a local
+Local legal-text files reproduced or cross-referenced: **176**. The one package without a local
 full license file is supplemented by the upstream-linked notice below.
 
 ## Upstream-supplemented notice
@@ -58,7 +145,9 @@ full license file is supplemented by the upstream-linked notice below.
 links to the author's [MIT notice](https://jsumners.mit-license.org/), which was
 retrieved on 2026-10-31 and is reproduced below. The linked page displays a
 current-year notice; its historical wording at the package's publication date
-was not independently retrieved.
+was not independently retrieved. The npm registry `gitHead` and GitHub tag
+both resolve to `80dfaef91ee87008f4ed2b6e78921d383bccd406`; the installed
+README matches that commit's README byte-for-byte.
 
 ## Follow-up required before distribution
 
@@ -157,7 +246,7 @@ Every row links to its package entry and locally observed full legal text, or it
 |  82 | [function-bind](#dependency-082)                          | 1.1.2   | MIT           | local full text        |
 |  83 | [get-intrinsic](#dependency-083)                          | 1.3.0   | MIT           | local full text        |
 |  84 | [get-proto](#dependency-084)                              | 1.0.1   | MIT           | local full text        |
-|  85 | [glob](#dependency-085)                                   | 13.0.6  | BlueOak-1.0.0 | local full text        |
+|  85 | [glob](#dependency-085)                                   | 14.0.2  | BlueOak-1.0.0 | local full text        |
 |  86 | [gopd](#dependency-086)                                   | 1.2.0   | MIT           | local full text        |
 |  87 | [has-symbols](#dependency-087)                            | 1.1.0   | MIT           | local full text        |
 |  88 | [hasown](#dependency-088)                                 | 2.0.4   | MIT           | local full text        |
@@ -183,7 +272,7 @@ Every row links to its package entry and locally observed full legal text, or it
 | 108 | [mime](#dependency-108)                                   | 3.0.0   | MIT           | local full text        |
 | 109 | [mime-db](#dependency-109)                                | 1.54.0  | MIT           | local full text        |
 | 110 | [mime-types](#dependency-110)                             | 3.0.2   | MIT           | local full text        |
-| 111 | [minimatch](#dependency-111)                              | 10.2.6  | BlueOak-1.0.0 | local full text        |
+| 111 | [minimatch](#dependency-111)                              | 11.0.1  | BlueOak-1.0.0 | local full text        |
 | 112 | [minipass](#dependency-112)                               | 7.1.3   | BlueOak-1.0.0 | local full text        |
 | 113 | [ms](#dependency-113)                                     | 2.1.3   | MIT           | local full text        |
 | 114 | [negotiator](#dependency-114)                             | 1.1.0   | MIT           | local full text        |
@@ -195,7 +284,7 @@ Every row links to its package entry and locally observed full legal text, or it
 | 120 | [once](#dependency-120)                                   | 1.4.0   | ISC           | local full text        |
 | 121 | [parseurl](#dependency-121)                               | 1.3.3   | MIT           | local full text        |
 | 122 | [path-key](#dependency-122)                               | 3.1.1   | MIT           | local full text        |
-| 123 | [path-scurry](#dependency-123)                            | 2.0.2   | BlueOak-1.0.0 | local full text        |
+| 123 | [path-scurry](#dependency-123)                            | 3.0.0   | BlueOak-1.0.0 | local full text        |
 | 124 | [path-to-regexp](#dependency-124)                         | 8.4.2   | MIT           | local full text        |
 | 125 | [pino](#dependency-125)                                   | 9.14.0  | MIT           | local full text        |
 | 126 | [pino-abstract-transport](#dependency-126)                | 2.0.0   | MIT           | local full text        |
@@ -249,6 +338,7 @@ Every row links to its package entry and locally observed full legal text, or it
 | 174 | [wrappy](#dependency-174)                                 | 1.0.2   | ISC           | local full text        |
 | 175 | [zod](#dependency-175)                                    | 4.6.7   | MIT           | local full text        |
 | 176 | [zod-to-json-schema](#dependency-176)                     | 3.25.2  | ISC           | local full text        |
+| 177 | [@isaacs/nonrecursive-glob-match](#dependency-177)        | 1.0.3   | BlueOak-1.0.0 | identical to entry 123 |
 
 ## Original license and notice texts
 
@@ -3190,11 +3280,11 @@ SOFTWARE.
 
 <a id="dependency-085"></a>
 
-### 85. glob@13.0.6
+### 85. glob@14.0.2
 
 Declared SPDX: `BlueOak-1.0.0`.
 
-Source: `node_modules/.pnpm/glob@13.0.6/node_modules/glob/LICENSE.md`.
+Source: `node_modules/.pnpm/glob@14.0.2/node_modules/glob/LICENSE.md`.
 
 Original-file SHA-256: `a49c9ba464796f65b59fca3f1e6ca40912df1e859f575383223f7ec6c5baae09`.
 
@@ -4176,11 +4266,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 <a id="dependency-111"></a>
 
-### 111. minimatch@10.2.6
+### 111. minimatch@11.0.1
 
 Declared SPDX: `BlueOak-1.0.0`.
 
-Source: `node_modules/.pnpm/minimatch@10.2.6/node_modules/minimatch/LICENSE.md`.
+Source: `node_modules/.pnpm/minimatch@11.0.1/node_modules/minimatch/LICENSE.md`.
 
 Original-file SHA-256: `2c7c5d22ed5a8ee968c64757710979afcd77438c48b4a265b94e615babd8a901`.
 
@@ -4630,11 +4720,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 <a id="dependency-123"></a>
 
-### 123. path-scurry@2.0.2
+### 123. path-scurry@3.0.0
 
 Declared SPDX: `BlueOak-1.0.0`.
 
-Source: `node_modules/.pnpm/path-scurry@2.0.2/node_modules/path-scurry/LICENSE.md`.
+Source: `node_modules/.pnpm/path-scurry@3.0.0/node_modules/path-scurry/LICENSE.md`.
 
 Original-file SHA-256: `8a1af140fdfbf5afd3df27f7e662f989c5b963a300020dfafce42033cae9e004`.
 
@@ -6442,3 +6532,16 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ```
+
+<a id="dependency-177"></a>
+
+### 177. @isaacs/nonrecursive-glob-match@1.0.3
+
+Declared SPDX: `BlueOak-1.0.0`.
+
+Source: `node_modules/.pnpm/@isaacs+nonrecursive-glob-match@1.0.3/node_modules/@isaacs/nonrecursive-glob-match/LICENSE.md`.
+
+Original-file SHA-256: `8a1af140fdfbf5afd3df27f7e662f989c5b963a300020dfafce42033cae9e004`.
+
+This file is byte-identical to the Blue Oak license reproduced in
+[entry 123](#dependency-123).
