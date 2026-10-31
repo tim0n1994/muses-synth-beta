@@ -84,7 +84,8 @@ describe("production static serving", () => {
       url: "/dashboard/deep-link",
       headers: { accept: "application/javascript" },
     });
-    expect(nonHtmlRoute.statusCode).toBe(404);
+    expect(nonHtmlRoute.statusCode).toBe(200);
+    expect(nonHtmlRoute.body).toContain("Muses test shell");
     const page = await app.inject({
       method: "GET",
       url: "/dashboard/deep-link",

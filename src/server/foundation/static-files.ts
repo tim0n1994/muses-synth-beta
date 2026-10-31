@@ -13,10 +13,14 @@ import {
 
 function acceptsHtml(header: string | string[] | undefined): boolean {
   const value = Array.isArray(header) ? header.join(",") : header;
-  // Accept text/html or */* (curl default) for non-API, non-asset routes.
-  // Explicit non-HTML Accept values bypass the SPA fallback.
+  // Preserve the existing non-API page fallback: text/html, */*, or an
+  // Accept value without application/json may receive the SPA shell.
   if (value === undefined || value === "") return true;
-  return value.toLowerCase().includes("text/html") || value.includes("*/*");
+  return (
+    value.includes("text/html") ||
+    value.includes("*/*") ||
+    !value.includes("application/json")
+  );
 }
 
 function isApiPath(url: string): boolean {
