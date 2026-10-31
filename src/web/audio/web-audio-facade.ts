@@ -125,6 +125,9 @@ export class WebAudioFacade implements AudioFacade {
     if (context?.state === "running") {
       await this.rampMasterGain(0, rampMs);
       if (this.disposed || revision !== this.transportRevision) return;
+      // A wall-clock timer can finish before the audio thread applies its ramp.
+      this.master.gain.cancelScheduledValues(context.currentTime);
+      this.master.gain.value = 0;
       const suspension = context.suspend();
       this.pendingSuspend = suspension;
       try {

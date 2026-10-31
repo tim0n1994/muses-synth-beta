@@ -28,8 +28,8 @@ node runtime.mjs watch --dir /path/to/project
 
 # source checkout
 pnpm watch -- --dir /path/to/project</code></pre>
-  <p class="zh">认证开启时，可通过可信凭据管理器的管道向 <code>--token-stdin</code> 提供已有会话 token，仅限回环地址。不要将密码或 token 写入命令参数或 shell 历史。token 拥有对应账户的权限，失效后需重新提供。</p>
-  <p class="en">With authentication enabled, pipe an existing session token from a trusted credential manager to <code>--token-stdin</code>; authenticated collection is loopback-only. Never put passwords or tokens in command arguments or shell history. A token has the account's permissions and must be replaced when expired.</p>
+  <p class="zh">发布包的启动器会清除继承的认证设置并强制关闭认证；设置 <code>MUSES_AUTH_ENABLED=true</code> 不会为发布包开启认证。只有源码模式支持可选认证：启用后，可通过可信凭据管理器的管道向 <code>--token-stdin</code> 提供已有会话 token，仅限回环地址。不要将密码或 token 写入命令参数或 shell 历史。token 拥有对应账户的权限，遇到 401/403 采集器会停止，需要重新提供有效 token。</p>
+  <p class="en">The bundle launcher clears inherited authentication settings and forces authentication off; setting <code>MUSES_AUTH_ENABLED=true</code> does not enable it in the bundle. Optional authentication is supported in source mode only: when enabled, pipe an existing session token from a trusted credential manager to <code>--token-stdin</code>; authenticated collection is loopback-only. Never put passwords or tokens in command arguments or shell history. A token has the account's permissions; on 401/403 the watcher stops and needs a new valid token.</p>
 
   <h2><span class="zh">2. 听到声音</span><span class="en">2. Start audio</span></h2>
   <p class="zh">watcher 根据真实文件变化上报事件；连续编辑需要至少三次事件、跨越 90 秒才能满足 BUILD 规则。达到策略门槛后，页面会显示声音建议。点击页面上的启动按钮；浏览器需要你的手势。你可以随时暂停，手动操作优先。</p>
@@ -40,8 +40,10 @@ pnpm watch -- --dir /path/to/project</code></pre>
   <h2><span class="zh">3. 隐私边界</span><span class="en">3. Privacy boundaries</span></h2>
   <p class="zh">默认不读取文件内容，也不发送相对文件路径；事件 subject 仍包含所选目录的名称。只有显式使用 <code>--include-paths</code> 才发送相对路径。匿名的发布包只适用于受信任的本机用户，本机其他进程仍可访问其 API；不要通过隧道或代理向外暴露。</p>
   <p class="en">The watcher does not read file contents or send relative file paths by default; the event subject still contains the selected directory name. Relative paths are sent only with <code>--include-paths</code>. The unauthenticated bundle is for one trusted local user; other local processes can access its API. Do not expose it through a tunnel or proxy.</p>
-  <p class="zh">发布后的原始事件保留期只影响新事件；设为 0 停止采集入库。过期的新事件按批清理，旧历史、备份和 SQLite 空闲空间不会被擦除。尚存的过期记录仍可通过历史 API 查询；保留期不是访问控制。会话历史保留、信号权重和应用排除尚未实现。</p>
-  <p class="en">Published raw-event retention applies only to new events; zero disables ingestion. Expired managed events are deleted in batches, while legacy history, backups and SQLite free space are not erased. Expired rows still present can be read through historical API queries; retention is not access control. Session-history retention, signal weights and application exclusions are not implemented.</p>
+  <p class="zh">发布的原始事件保留期默认 24 小时，只影响新事件；设为 0 停止新事件入库。启动时清理一批到期的受管理事件，此后每 60 秒最多清理 500 条；积压可能延迟删除。旧历史会保留，SQLite 空闲页、WAL 和备份不保证擦除。清理前，<code>includeExpired=true</code> 或历史 <code>asOf</code> 查询仍可能返回过期记录；保留期不是访问控制。</p>
+  <p class="en">Published raw-event retention defaults to 24 hours and applies only to new events; zero disables new-event ingestion. Cleanup runs one batch at startup, then removes at most 500 expired managed events every 60 seconds; backlog may delay deletion. Legacy history is preserved; erasure of SQLite free pages, WAL and backups is not guaranteed. Before cleanup, <code>includeExpired=true</code> or historical <code>asOf</code> queries can still return expired rows; retention is not access control.</p>
+  <p class="zh">信号开关、原始信号保留开关、信号权重、应用排除、会话历史保留以及屏幕采集及其控制尚未实现。更改这些设置会被拒绝（HTTP 409 <code>SETTINGS_PRIVACY_UNSUPPORTED</code>）；已保存的值不代表实际执行。</p>
+  <p class="en">Signal enable/disable, raw-signal retention switches, signal weights, application exclusions, session-history retention, and screen collection and its controls are not implemented. Changes to these settings are rejected (HTTP 409 <code>SETTINGS_PRIVACY_UNSUPPORTED</code>); stored values do not establish enforcement.</p>
 
   <h2><span class="zh">4. 数据与故障</span><span class="en">4. Data and troubleshooting</span></h2>
   <p class="zh">发布包把数据库和日志写入自身的 <code>.muses/</code>。请自行保管和备份。遇到异常时先检查本机服务、采集器输出与浏览器音量；不要直接清理已有数据库。是否公开、迁移或恢复数据需要单独评估。</p>

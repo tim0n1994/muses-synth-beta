@@ -70,6 +70,15 @@ new token must be supplied separately.
 密码或 token 写入命令参数或 shell 历史；token 拥有对应账户权限，遇到
 401/403 采集器会停止，需要重新提供有效 token。
 
+The packaged `runtime.mjs start` launcher clears inherited authentication
+settings and forces authentication off. Setting `MUSES_AUTH_ENABLED=true`
+does not enable authentication in the bundle; the optional authentication
+workflow above is for source mode only.
+
+发布包的 `runtime.mjs start` 启动器会清除继承的认证设置并强制关闭认证。
+设置 `MUSES_AUTH_ENABLED=true` 不会为发布包开启认证；上述可选认证流程
+仅适用于源码模式。
+
 ## Data and retention / 数据与保留期
 
 The default source-run database is `.muses/muses.sqlite` under the checkout.
@@ -77,22 +86,32 @@ Use a new directory for this beta and back up any data you intend to keep. Do
 not point it at an existing database without a separately reviewed migration.
 
 Published raw-event retention defaults to 24 hours and applies to new events
-only. Zero disables ingestion. Expired managed events are removed in batches of
-at most 500 per minute; backlog may delay deletion. Old history is preserved.
+only. Zero disables ingestion. Cleanup runs one batch at startup, then removes
+at most 500 expired managed events every 60 seconds; backlog may delay deletion.
+Old history is preserved.
 Retention does not guarantee erasure of SQLite free pages, WAL or backups, and
 is not access control: `includeExpired=true` or a historical `asOf` query can
-return expired rows that have not yet been removed. Session-history retention,
-signal weights, application exclusions and screen capture controls are not
-implemented; their values are not evidence of enforcement.
+return expired rows that have not yet been removed. Signal enable/disable
+(`signals.*.enabled`), raw-signal retention switches (`signals.*.retainRaw`),
+signal weights (`signals.*.weight`), application exclusions
+(`privacy.excludedApplications`), session-history retention
+(`privacy.sessionHistoryRetentionDays`), and screen collection and its control
+(`privacy.captureScreenContent`) are not implemented. Changes to these settings
+are rejected with HTTP 409 `SETTINGS_PRIVACY_UNSUPPORTED`; stored values are not
+evidence of enforcement.
 
 源码运行时默认数据库位于项目目录下的 `.muses/muses.sqlite`。请使用新目录，
 并自行备份需要保留的数据；未经单独审查，不要指向已有数据库。
 
 发布后的原始事件保留期默认 24 小时，只影响新事件；设为零会停止新事件入库。
-到期的新事件每分钟最多清理 500 条，积压可能延迟；旧历史保留。该机制不保证
+启动时清理一批到期的受管理事件，此后每 60 秒最多清理 500 条，积压可能延迟；
+旧历史保留。该机制不保证
 擦除 SQLite 空闲页、WAL 或备份，也不是访问控制：清理前，`includeExpired=true`
-或历史 `asOf` 查询仍可能返回过期记录。会话历史保留、信号权重、应用排除和
-屏幕采集控制尚未实现。
+或历史 `asOf` 查询仍可能返回过期记录。信号开关（`signals.*.enabled`）、原始
+信号保留开关（`signals.*.retainRaw`）、信号权重（`signals.*.weight`）、应用排除
+（`privacy.excludedApplications`）、会话历史保留（`privacy.sessionHistoryRetentionDays`）
+以及屏幕采集及其控制（`privacy.captureScreenContent`）尚未实现。更改这些设置
+会被拒绝（HTTP 409 `SETTINGS_PRIVACY_UNSUPPORTED`）；已保存的值不代表实际执行。
 
 ## Checks / 检查
 

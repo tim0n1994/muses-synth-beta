@@ -32,6 +32,7 @@ export class AudioEffectExecutor {
   private operation: Promise<void> = Promise.resolve();
   private startRevision = 0;
   private starting = false;
+  private pendingPause: Promise<void> | null = null;
   private manualRevision = 0;
   private disposed = false;
   private disposal: Promise<void> | null = null;
@@ -71,6 +72,7 @@ export class AudioEffectExecutor {
     assertGain(targetGain);
     const revision = ++this.startRevision;
     this.starting = true;
+    this.pendingPause = null;
     const activation = this.facade.start();
     void activation.catch(() => undefined);
     await this.enqueue(async () => {
@@ -104,10 +106,16 @@ export class AudioEffectExecutor {
     if (!this.starting && (!this.started || this.paused)) {
       return;
     }
+    this.beginPause(0);
+  }
+
+  private beginPause(rampMs: number): void {
     this.startRevision += 1;
     this.starting = false;
     this.paused = true;
-    void this.facade.pause(0).catch(() => undefined);
+    this.pendingPause = this.facade.pause(rampMs);
+    // Cancellation callers are synchronous; pause() still observes this result.
+    void this.pendingPause.catch(() => undefined);
     this.publishSnapshot();
   }
 
@@ -118,16 +126,31 @@ export class AudioEffectExecutor {
   }
 
   public async pause(rampMs = 500): Promise<void> {
+    if (this.disposed) throw new Error("Audio executor is disposed.");
+    assertRamp(rampMs);
     this.manualRevision += 1;
-    this.cancelPendingStart();
+    if (this.starting) {
+      this.cancelPendingStart();
+    } else if (
+      this.startRevision > 0 &&
+      this.pendingPause === null &&
+      !this.paused
+    ) {
+      // A cancelled first Start can still require a native pause retry.
+      this.beginPause(rampMs);
+    }
+    const pendingPause = this.pendingPause;
     await this.enqueue(async () => {
-      assertRamp(rampMs);
-      if (!this.started || this.paused) {
-        this.recordManualOverride("pause");
-        return;
+      try {
+        await pendingPause;
+      } catch (error: unknown) {
+        if (!this.disposed && this.pendingPause === pendingPause) {
+          this.paused = false;
+        }
+        throw error;
+      } finally {
+        if (this.pendingPause === pendingPause) this.pendingPause = null;
       }
-      await this.facade.pause(rampMs);
-      this.paused = true;
       this.recordManualOverride("pause");
     });
   }

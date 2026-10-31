@@ -27,6 +27,7 @@ function harness() {
     disconnect: vi.fn(),
     gain: parameter(),
   });
+  const gains: Array<ReturnType<typeof node>> = [];
   const makeSource = () => ({
     ...node(),
     frequency: parameter(),
@@ -45,7 +46,11 @@ function harness() {
     currentTime: 0,
     sampleRate: 100,
     destination: node(),
-    createGain: vi.fn(node),
+    createGain: vi.fn(() => {
+      const value = node();
+      gains.push(value);
+      return value;
+    }),
     createOscillator: vi.fn(source),
     createBufferSource: vi.fn(source),
     createBiquadFilter: () => ({
@@ -80,6 +85,7 @@ function harness() {
     ramp,
     suspendEntered,
     suspendFinished,
+    gains,
     sources,
     delaySuspend: () => {
       delaySuspend = true;
@@ -120,14 +126,32 @@ describe("WebAudioFacade asynchronous ownership", () => {
     expect(h.context.state).toBe("closed");
   });
   it("a new start cancels an old pause still awaiting its zero-ms ramp", async () => {
-    const { facade, context, ramp } = harness();
+    const { facade, context, ramp, gains } = harness();
     await facade.start();
     const pause = facade.pause(0);
     await facade.start();
+    const master = gains[0]!;
+    master.gain.value = 0.18;
     ramp.resolve();
     await pause;
     expect(context.state).toBe("running");
     expect(context.suspend).not.toHaveBeenCalled();
+    expect(master.gain.value).toBe(0.18);
+  });
+
+  it("forces zero gain before suspension when audio rendering lags the timer", async () => {
+    const { facade, context, ramp, gains } = harness();
+    await facade.start();
+    const master = gains[0]!;
+    master.gain.value = 0.18;
+    const pause = facade.pause(0);
+    ramp.resolve();
+    await pause;
+    expect(master.gain.cancelScheduledValues).toHaveBeenLastCalledWith(
+      context.currentTime,
+    );
+    expect(master.gain.value).toBe(0);
+    expect(context.state).toBe("suspended");
   });
 
   it("a new start wins even when an older native suspend is already pending", async () => {

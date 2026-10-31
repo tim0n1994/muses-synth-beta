@@ -13,7 +13,7 @@ import { guardBundleDatabase } from "./data-guard.mjs";
 import { withoutAuditExemptions } from "./dependency-policy.mjs";
 const release = {
   schema: "muses-local-beta/v1",
-  version: "0.3.2",
+  version: "0.3.3-beta.1",
   source_sha: "a".repeat(40),
   source_tree: "b".repeat(40),
   source_digest: "c".repeat(64),

@@ -19,7 +19,7 @@ permissions:
   contents: read
 jobs:
   binding:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MUSES_CI_RUNNER || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -41,7 +41,7 @@ jobs:
     uses: ./.github/workflows/ci.yml
   assets:
     needs: gates
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.MUSES_CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
