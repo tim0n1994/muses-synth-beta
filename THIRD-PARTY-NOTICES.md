@@ -1,40 +1,54 @@
-# Third-Party Notices — DRAFT
+# Third-Party Notices
 
-Prepared: 2026-10-31. Scope: the current macOS installation of this public synthetic candidate.
+Prepared and reviewed: 2026-10-31. Scope: the synthetic single-user release
+candidate and its pinned production dependency graph.
 
 ## Status and scope
 
-This draft inventories **177 distinct production dependency name/version pairs (171 names)** reported by `pnpm licenses list --json --prod` and verified against each installed package's `package.json`. Multiple versions of a name are separate entries. Packages included by the production graph, including peer/type dependencies, are retained even if their names look like development tools. The project's own selected MIT license is separate and does not replace third-party terms.
+This inventory lists **177 distinct production dependency name/version pairs (171 names)** reported by `pnpm licenses list --json --prod` and verified against each installed package's `package.json`. Multiple versions of a name are separate entries. Packages included by the production graph, including peer/type dependencies, are retained even if their names look like development tools. The project's own selected MIT license is separate and does not replace third-party terms.
 
 **176 package/version entries have local license text reproduced below or
 cross-referenced to identical reproduced text; one
 additional notice was retrieved from its versioned upstream README's license
-link. This is an inventory and notice draft, not a completed copyright
-clearance or a release approval.** No copyright holder or year has been
-inferred from package author metadata.
+link.** On 2026-10-31 the repository owner reviewed and accepted the documented
+release scope and evidence, including the limitations below. No copyright
+holder or year has been inferred from package author metadata.
 
-The evidence is the locally installed production dependency graph on macOS (arm64). Linux, Windows, other architectures, optional dependencies and another installation can differ. This document is not a complete cross-platform audit and does not cover the full development/build dependency graph. Nothing here claims that every installed package is actually shipped.
+The production graph and notice coverage were checked on macOS ARM64, Linux
+ARM64 and an emulated Linux x86_64 installation. Other platforms, optional
+dependencies and later installations can differ. The generated supplemental
+inventory records the build host's installed build graph. Nothing here claims
+that every installed package is actually shipped.
 
-Generated frontend bundles may contain third-party code contributed by build tools, plugins, runtime helpers or other development dependencies. Before distribution, inspect the actual emitted JavaScript/CSS, retained license comments and asset/bundle notices, and reconcile them with this inventory. A production-only dependency listing cannot establish complete notice coverage of build outputs.
+Generated frontend bundles may contain third-party code contributed by build
+tools, plugins, runtime helpers or other development dependencies. Each release
+must check its emitted JavaScript against these notices and repeat review when
+the relevant code or dependency graph changes.
 
 For the inspected macOS build, six emitted JavaScript source maps referenced 19
 distinct installed packages; all 19 name/version pairs have entries below, and
-none of the mapped package sources were unresolved. An instrumented rebuild
+none of the mapped package sources were unresolved. A Linux x86_64 build with
+Node 22.22.2 produced byte-identical JavaScript and CSS assets. An instrumented rebuild
 produced a byte-identical CSS asset from four project CSS files, with no
 third-party CSS modules, external imports, URLs or font faces. These findings
 do not establish complete dynamic-content or other-platform notice coverage.
 
-Native binaries and their embedded components also require artifact-level verification. For example, the installed `better-sqlite3@13.0.1` package includes native prebuilds for multiple operating systems; its reproduced package-level MIT license does not establish the provenance or complete notices of every embedded component. Verify the exact shipped native binaries and any SQLite or other embedded component notices. No original music, audio recordings, private data or private history is reproduced here.
+The release archive does not contain installed native binaries. Its locked
+`better-sqlite3@13.0.1` dependency builds locally from source; the inspected
+macOS and Linux installations compiled SQLite 3.53.3. The package and SQLite
+core notices are described below. Windows and other untested environments are
+outside this review. No original music, audio recordings, private data or
+private history is reproduced here.
 
 On the inspected macOS arm64 installation, an in-memory `sqlite_version()`
 query returned SQLite 3.53.3, matching the version in the installed package's
 SQLite amalgamation source. The [SQLite project](https://www.sqlite.org/copyright.html)
 describes SQLite as public domain. This observation does not establish the
-contents or license status of every native prebuild or other embedded component.
+contents or license status of other native builds or embedded components.
 
 ## Method and evidence
 
-- Offline command: `pnpm licenses list --json --prod`; no dependency installation, network fetch, build, or package lifecycle script was run for this draft.
+- Production inventory: `pnpm licenses list --json --prod`; platform installations and instrumented builds were performed separately.
 - Name and version come from the actual installed manifest for each path returned by pnpm. SPDX identifiers below are the matching pnpm/manifest declarations; they are not an independent legal determination.
 - Each installed package was recursively checked for files named LICENSE/LICENCE, NOTICE, COPYING, COPYRIGHT or PATENTS (including suffixes, case insensitive), excluding nested `node_modules`. Matching local files are reproduced with their copyright, permission, conditions, notice and disclaimer text; line endings and trailing whitespace are normalized. Source labels are candidate-relative paths, and SHA-256 identifies the original file bytes.
 - Inline source headers, README attribution sections, embedded binaries and generated artifacts have not received an exhaustive attribution audit. Absence of a separate NOTICE file is not proof that no other obligations exist.
@@ -149,16 +163,16 @@ was not independently retrieved. The npm registry `gitHead` and GitHub tag
 both resolve to `80dfaef91ee87008f4ed2b6e78921d383bccd406`; the installed
 README matches that commit's README byte-for-byte.
 
-## Follow-up required before distribution
+## Maintaining this inventory
 
-1. On every supported target platform, repeat the installed production inventory and reconcile optional/platform-specific packages with the exact distributed artifacts.
-2. Audit actual frontend/build outputs and any included build-time third-party code, source headers, native binaries and embedded components; add their required original notices and license texts. Inspect the multiple-platform prebuild contents of `better-sqlite3` if they are distributed.
-3. Ensure this notice and all required license/attribution material accompany the release; confirm every embedded source pointer below has its full text inline here even when `node_modules` is omitted.
-4. Have the release owner review remaining attribution obligations and unresolved items before treating notice coverage as complete.
+1. Repeat the installed production inventory and reconcile optional or platform-specific packages whenever the supported platforms or distributed artifacts change.
+2. Re-review changed frontend assets, build-time dependencies, source headers and native components; add any newly required original notices and license texts.
+3. Include this notice and required attribution material with distributed artifacts, even when `node_modules` is omitted.
+4. Have the release owner review changes to the dependency graph, assets or distribution scope before using a revised notice.
 
 ## Production dependency index
 
-Every row links to its package entry and locally observed full legal text, or its explicit unresolved status.
+Every row links to its package entry and reproduced or upstream-linked legal text.
 
 |   # | Package                                                   | Version | Declared SPDX | Evidence               |
 | --: | --------------------------------------------------------- | ------- | ------------- | ---------------------- |

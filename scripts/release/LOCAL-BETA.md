@@ -50,10 +50,11 @@ GitHub release. Public publication needs authorization and verification of
 tag/SHA/assets. Run the full CI gates before using the release
 workflow; do not bypass failed tests or audit.
 
-`THIRD-PARTY-NOTICES.md` is included verbatim as a draft (177 production dependency
-versions, 176 local license texts and one upstream-linked license text).
+`THIRD-PARTY-NOTICES.md` is included verbatim with the owner's reviewed scope
+(177 production dependency versions, 176 local license texts and one
+upstream-linked license text).
 `THIRD-PARTY-NOTICES.txt` additionally inventories this machine's installed build
-graph. Neither file proves license closure: Linux platform packages, frontend
-bundling and native components still require review before public distribution.
-Non-preview packaging refuses a notice still marked DRAFT; removing that marker
-is a human review decision, not proof produced by the packaging script.
+graph. Packaging rechecks the installed production versions and license texts,
+mapped browser dependencies, the reviewed unmapped build helper and CSS asset.
+A changed graph or asset requires review; these checks do not approve untested platforms.
+Non-preview packaging refuses a notice marked DRAFT.

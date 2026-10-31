@@ -59,6 +59,14 @@ execFileSync(process.execPath, ["scripts/release/check-browser-notices.mjs"], {
   cwd: root,
   stdio: "inherit",
 });
+execFileSync(
+  process.execPath,
+  ["scripts/release/check-production-notices.mjs"],
+  {
+    cwd: root,
+    stdio: "inherit",
+  },
+);
 const out = resolve(values.out);
 mkdirSync(out);
 const stage = mkdtempSync(join(tmpdir(), "muses-package-"));
